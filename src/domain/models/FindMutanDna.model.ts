@@ -1,17 +1,11 @@
-// import { QUADRANTS } from '../enumns/enums'
-
-export enum QUADRANTS {
-  one = 'one',
-  two = 'two',
-  three = 'three',
-  four = 'four'
-}
+import { QUADRANTS } from '../enumns/enums'
 
 export class FindMutanDna {
   constructor(dna: string[]) {
     this.dna = dna
     this.size = dna.length
     this.matchLetter = ''
+    this.buildCurrentMatrix()
   }
 
   dinamicMatrix2x2 = {
@@ -39,11 +33,10 @@ export class FindMutanDna {
   currentMatrix: string[]
 
   detect() {
-    this.buildCurrentMatrix()
-    const endcolumns = this.size - 1
-    let n = 0
+    const quadrantLengs = (this.size / 2) * (this.size / 2)
+    let n = 1
 
-    while (n < endcolumns) {
+    while (n <= quadrantLengs) {
       if (
         this.strategy('horizontalMatch', 'moveRight', 'moveLeft') ||
         this.strategy('verticalMatch', 'moveDown', 'moveUp') ||
@@ -61,14 +54,19 @@ export class FindMutanDna {
       ) {
         return true
       }
-      if ((this.size / 2) % n == 0) {
-        this.moveRowDow()
-      } else {
-        this.moveRight()
+      if (n !== quadrantLengs) {
+        if (n % (this.size / 2) === 0) {
+          this.moveRowDow()
+        } else {
+          this.moveRight()
+        }
+        this.buildCurrentMatrix()
       }
-      this.buildCurrentMatrix()
+
       n += 1
     }
+
+    return false
   }
 
   strategy(match, moveDone?, moveReversed?, letter = 0): boolean {
@@ -163,8 +161,8 @@ export class FindMutanDna {
 
   moveDiagonalRightReverse(): void {
     for (const quadrant in QUADRANTS) {
-      this.dinamicMatrix2x2[quadrant].row += 2
-      this.dinamicMatrix2x2[quadrant].column += 2
+      this.dinamicMatrix2x2[quadrant].row -= 2
+      this.dinamicMatrix2x2[quadrant].column -= 2
     }
   }
 
@@ -196,3 +194,6 @@ export class FindMutanDna {
     this.dinamicMatrix2x2[QUADRANTS.four].column = 1
   }
 }
+
+// Mutan "dna": ["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]
+// Human "dna": ["ATGCGA","CAGTGC","TTATTT","AGACGG","GCGTCA","TCACTG"]

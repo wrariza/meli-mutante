@@ -1,6 +1,6 @@
 export enum QUADRANTS {
   one = 'one',
   two = 'two',
-  tree = 'tree',
+  three = 'three',
   four = 'four'
 }

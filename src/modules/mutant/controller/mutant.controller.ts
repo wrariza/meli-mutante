@@ -7,7 +7,7 @@ export class MutantController {
   constructor(@Inject(SMutan) private mutantService: MutantService) {}
 
   @Post('mutant')
-  detect(@Body('DNA') dna: string[]) {
+  detect(@Body('dna') dna: string[]) {
     return this.mutantService.detect(dna)
   }
 
