@@ -1,4 +1,9 @@
-import { QUADRANTS } from '../enumns/enums'
+import { QUADRANTS } from '../enumns/quadrants.enums'
+import { QUADRANTS_NUMBERS } from '../enumns/quadrants_numbers'
+import { QUADRANT_MATCHS } from '../enumns/quadrants_matchs'
+import { QUADRANT_MOVES } from '../enumns/quadrant_moves'
+import { Strategy } from './Strategy.model'
+import { Quadrant } from './Quadrant.model'
 
 export class FindMutanDna {
   constructor(dna: string[]) {
@@ -8,24 +13,55 @@ export class FindMutanDna {
     this.buildCurrentMatrix()
   }
 
-  dinamicMatrix2x2 = {
+  dinamicMatrix2x2: Record<QUADRANTS, Quadrant> = {
     one: {
-      row: 0,
-      column: 0
+      row: QUADRANTS_NUMBERS.zero,
+      column: QUADRANTS_NUMBERS.zero
     },
     two: {
-      row: 0,
-      column: 1
+      row: QUADRANTS_NUMBERS.zero,
+      column: QUADRANTS_NUMBERS.one
     },
     three: {
-      row: 1,
-      column: 0
+      row: QUADRANTS_NUMBERS.one,
+      column: QUADRANTS_NUMBERS.zero
     },
     four: {
-      row: 1,
-      column: 1
+      row: QUADRANTS_NUMBERS.one,
+      column: QUADRANTS_NUMBERS.one
     }
   }
+
+  strategys: Strategy[] = [
+    {
+      name: QUADRANT_MATCHS.horizontal,
+      match: [QUADRANTS_NUMBERS.zero, QUADRANTS_NUMBERS.one],
+      moveDone: QUADRANT_MOVES.right,
+      moveReversed: QUADRANT_MOVES.left,
+      matchLetterPostion: QUADRANTS_NUMBERS.zero
+    },
+    {
+      name: QUADRANT_MATCHS.vertical,
+      match: [QUADRANTS_NUMBERS.zero, QUADRANTS_NUMBERS.two],
+      moveDone: QUADRANT_MOVES.down,
+      moveReversed: QUADRANT_MOVES.up,
+      matchLetterPostion: QUADRANTS_NUMBERS.zero
+    },
+    {
+      name: QUADRANT_MATCHS.diagonalRight,
+      match: [QUADRANTS_NUMBERS.zero, QUADRANTS_NUMBERS.three],
+      moveDone: QUADRANT_MOVES.diagonalRight,
+      moveReversed: QUADRANT_MOVES.diagonalRightReverse,
+      matchLetterPostion: QUADRANTS_NUMBERS.zero
+    },
+    {
+      name: QUADRANT_MATCHS.diagonalLeft,
+      match: [QUADRANTS_NUMBERS.one, QUADRANTS_NUMBERS.two],
+      moveDone: QUADRANT_MOVES.diagonalLeft,
+      moveReversed: QUADRANT_MOVES.diagonalLeftReverse,
+      matchLetterPostion: QUADRANTS_NUMBERS.zero
+    }
+  ]
 
   size: number
   dna: string[]
@@ -33,45 +69,57 @@ export class FindMutanDna {
   currentMatrix: string[]
 
   detect() {
-    const quadrantLengs = (this.size / 2) * (this.size / 2)
-    let n = 1
+    const quadrantTotal = (this.size / 2) * (this.size / 2)
+    let currentColumn = 1
 
-    while (n <= quadrantLengs) {
-      if (
-        this.strategy('horizontalMatch', 'moveRight', 'moveLeft') ||
-        this.strategy('verticalMatch', 'moveDown', 'moveUp') ||
-        this.strategy(
-          'diagonalRightMatch',
-          'moveDiagonalRight',
-          'moveDiagonalRightReverse'
-        ) ||
-        this.strategy(
-          'diagonalLeftMatch',
-          'moveDiagonalLeft',
-          'moveDiagonalLeftReverse',
-          1
-        )
-      ) {
+    while (currentColumn <= quadrantTotal) {
+      this.validMoveAndFinalQuadrantColumn(currentColumn, quadrantTotal)
+
+      if (this.applyStrategys()) {
         return true
       }
-      if (n !== quadrantLengs) {
-        if (n % (this.size / 2) === 0) {
-          this.moveRowDow()
-        } else {
-          this.moveRight()
-        }
-        this.buildCurrentMatrix()
-      }
 
-      n += 1
+      currentColumn += 1
     }
 
     return false
   }
 
-  strategy(match, moveDone?, moveReversed?, letter = 0): boolean {
-    if (this[match]()) {
-      this.setMatchLetter(this.currentMatrix[0])
+  applyStrategys() {
+    return this.strategys.some(s => {
+      return this.strategy(
+        s.match,
+        s.moveDone,
+        s.moveReversed,
+        s.matchLetterPostion
+      )
+    })
+  }
+
+  validMoveAndFinalQuadrantColumn(
+    currentColumn: number,
+    quadrantLengs: number
+  ) {
+    const isLastColumn = currentColumn % (this.size / 2) === 0
+
+    if (currentColumn !== quadrantLengs) {
+      if (isLastColumn) {
+        this.moveRowDow()
+      } else {
+        this.moveRight()
+      }
+      this.buildCurrentMatrix()
+    }
+  }
+
+  strategy(
+    match,
+    moveDone?: QUADRANT_MOVES,
+    moveReversed?: QUADRANT_MOVES,
+    letter = QUADRANTS_NUMBERS.zero
+  ): boolean {
+    if (this.matchQuadrant(match)) {
+      this.setMatchLetter(this.currentMatrix[letter])
       this[moveDone]()
       this.buildCurrentMatrix()
       return this.strategyDeep(match, moveReversed, letter)
@@ -80,8 +128,11 @@ export class FindMutanDna {
     }
   }
 
-  strategyDeep(match, moveReversed, letter) {
-    if (this[match]() && this.matchLetter === this.currentMatrix[letter]) {
+  strategyDeep(match, moveReversed: QUADRANT_MOVES, letterPosition: number) {
+    if (
+      this.matchQuadrant(match) &&
+      this.matchLetter === this.currentMatrix[letterPosition]
+    ) {
       return true
     } else {
       this[moveReversed]()
@@ -108,23 +159,11 @@ export class FindMutanDna {
     }
   }
 
-  horizontalMatch(): boolean {
-    if (this.currentMatrix[0] === this.currentMatrix[1]) return true
-    return false
-  }
+  matchQuadrant(match) {
+    if (this.currentMatrix[match[0]] === this.currentMatrix[match[1]]) {
+      return true
+    }
 
-  verticalMatch(): boolean {
-    if (this.currentMatrix[0] === this.currentMatrix[2]) return true
-    return false
-  }
-
-  diagonalRightMatch(): boolean {
-    if (this.currentMatrix[0] === this.currentMatrix[3]) return true
-    return false
-  }
-
-  diagonalLeftMatch(): boolean {
-    if (this.currentMatrix[1] === this.currentMatrix[2]) return true
     return false
   }
 
@@ -197,3 +236,13 @@ export class FindMutanDna {
 
 // Mutan "dna": ["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]
 // Human "dna": ["ATGCGA","CAGTGC","TTATTT","AGACGG","GCGTCA","TCACTG"]
+// const a = new FindMutanDna([
+//   'ATGCGA',
+//   'CAGTGC',
+//   'TTATTT',
+//   'AGACGG',
+//   'GCGTCA',
+//   'TCACTG'
+// ])
+
+// a.detect()
