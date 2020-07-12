@@ -61,7 +61,11 @@ export class FindMutanDna {
       ) {
         return true
       }
-      this.moveRowDow()
+      if ((this.size / 2) % n == 0) {
+        this.moveRowDow()
+      } else {
+        this.moveRight()
+      }
       this.buildCurrentMatrix()
       n += 1
     }
