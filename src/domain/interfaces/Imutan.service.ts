@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs'
+
 export interface IMutanService {
-  detect(dna: string[])
+  detect(dna: string[]): Observable<any>
 }
