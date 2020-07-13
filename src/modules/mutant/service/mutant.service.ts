@@ -5,6 +5,6 @@ import { FindMutanDna } from '../../../domain/models/FindMutanDna.model'
 @Injectable()
 export class MutantService implements IMutanService {
   detect(dna: string[]) {
-    return new FindMutanDna(dna).detect()
+    return new FindMutanDna(dna).run()
   }
 }

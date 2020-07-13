@@ -1,3 +1,3 @@
 export interface IMutanService {
-  detect(dna: string[])
+  detect(dna: string[]): boolean
 }
