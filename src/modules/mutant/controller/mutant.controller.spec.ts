@@ -84,4 +84,20 @@ describe('Mutant Controller', () => {
       ])
     ).toEqual(false)
   })
+
+  it('Should call get stats', async () => {
+    const mock = {
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      count_mutant_dna: 40,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      count_human_dna: 100,
+      ratio: 0.4
+    }
+    jest.spyOn(service, 'stats').mockImplementation(async () => {
+      return mock
+    })
+
+    expect(await controller.stats()).toEqual(mock)
+  })
 })
+2

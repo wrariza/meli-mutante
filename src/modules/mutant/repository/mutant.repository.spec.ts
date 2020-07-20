@@ -18,6 +18,15 @@ describe('Mutant Repository', () => {
           useValue: {
             find: () => {
               return []
+            },
+            stats: () => {
+              return {
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                count_mutant_dna: 40,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                count_human_dna: 100,
+                ratio: 0.4
+              }
             }
           }
         }
@@ -33,14 +42,30 @@ describe('Mutant Repository', () => {
   })
 
   it('Shold be call repository create ', () => {
-    const mock = { dna: '', human: true, mutant: false }
     jest.spyOn(repository, 'find').mockImplementation(async (dna: string) => {
       return await dnaModel.find({ dna: dna })
     })
 
-    repository.create(mock).then(() => {
+    repository.stats().then(() => {
       expect(repository.create).toHaveBeenCalled()
       expect(repository.find).toHaveBeenCalled()
+    })
+  })
+
+  it('Shold be call stats repository  ', () => {
+    const mock = { dna: '', human: true, mutant: false }
+    jest.spyOn(repository, 'stats').mockImplementation(async () => {
+      return await {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        count_mutant_dna: 40,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        count_human_dna: 100,
+        ratio: 0.4
+      }
+    })
+
+    repository.create(mock).then(() => {
+      expect(repository.stats).toHaveBeenCalled()
     })
   })
 })

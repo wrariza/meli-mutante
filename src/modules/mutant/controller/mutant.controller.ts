@@ -9,13 +9,14 @@ import {
 } from '@nestjs/common'
 import { MutantService } from '../service/mutant.service'
 import { SMutan } from '../../../bin/constants_injection'
+import { Stats } from '../../../domain/models/stats/Stats.model'
 
 @Controller('')
 export class MutantController {
   constructor(@Inject(SMutan) private mutantService: MutantService) {}
 
   @Post('mutant')
-  mutant(@Res() response, @Body('dna') dna: string[]) {
+  mutant(@Res() response, @Body('dna') dna: string[]): Promise<boolean> {
     if (this.mutantService.detect(dna)) {
       return response.status(HttpStatus.OK).send()
     }
@@ -23,8 +24,7 @@ export class MutantController {
   }
 
   @Get('stats')
-  stats() {
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    return { count_mutant_dna: 40, count_human_dna: 100, ratio: 0.4 }
+  stats(): Promise<Stats> {
+    return this.mutantService.stats()
   }
 }

@@ -5,6 +5,8 @@ import { Model } from 'mongoose'
 import { Dna } from '../schemas/dna.schema'
 import { CreateDnaDto } from '../dto/create-dna.dto'
 
+import { Stats } from '../../../domain/models/stats/Stats.model'
+
 @Injectable()
 export class MutantRepository {
   constructor(@InjectModel(Dna.name) private readonly dnaModel: Model<Dna>) {}
@@ -19,5 +21,19 @@ export class MutantRepository {
 
   async find(dna: string): Promise<Dna[]> {
     return this.dnaModel.find({ dna: dna })
+  }
+
+  async stats(): Promise<Stats> {
+    const mutant = await this.dnaModel.find({ mutant: true }).count()
+    const human = await this.dnaModel.find({ human: true }).count()
+    const ratio = mutant / human
+
+    return {
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      count_mutant_dna: mutant,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      count_human_dna: human,
+      ratio: ratio
+    }
   }
 }

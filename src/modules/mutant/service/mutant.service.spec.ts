@@ -16,6 +16,15 @@ describe('MutantService', () => {
           useValue: {
             create: () => {
               return {}
+            },
+            stats: async () => {
+              return {
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                count_mutant_dna: 40,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                count_human_dna: 100,
+                ratio: 0.4
+              }
             }
           }
         }
@@ -56,5 +65,16 @@ describe('MutantService', () => {
         'TCACTG'
       ])
     ).toEqual(true)
+  })
+
+  it('Should call stats', async () => {
+    const mock = {
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      count_mutant_dna: 40,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      count_human_dna: 100,
+      ratio: 0.4
+    }
+    expect(await service.stats()).toEqual(mock)
   })
 })
