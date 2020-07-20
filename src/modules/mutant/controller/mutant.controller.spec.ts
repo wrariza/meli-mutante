@@ -1,9 +1,9 @@
+import { HttpStatus } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { MutantController } from './mutant.controller'
 import { SMutan } from '../../../bin/constants_injection'
 import { MutantService } from '../service/mutant.service'
 import { statsMock } from '../../../../test/mocks/statsMock'
-import { of } from 'rxjs'
 
 describe('Mutant Controller', () => {
   let controller: MutantController
@@ -16,7 +16,7 @@ describe('Mutant Controller', () => {
         {
           provide: SMutan,
           useValue: {
-            detect: () => of(true),
+            detect: () => true,
             stats: () => {
               return statsMock
             }
@@ -33,13 +33,55 @@ describe('Mutant Controller', () => {
     expect(controller).toBeDefined()
   })
 
-  it('Should call post mutant', done => {
-    const postMutantSpy = jest.spyOn(service, 'detect')
+  it('Should call post mutant', async () => {
+    jest.spyOn(service, 'detect').mockImplementation(() => true)
 
-    controller.mutant(['', '', '', '', '', '']).subscribe((r: any) => {
-      expect(postMutantSpy).toHaveBeenCalled()
-      expect(r).toEqual(true)
-      done()
-    })
+    const res = {
+      status: function(responseStatus) {
+        expect(responseStatus).toEqual(HttpStatus.OK)
+
+        const send = function send() {
+          return true
+        }
+        return { send }
+      }
+    }
+
+    expect(
+      await controller.mutant(res, [
+        'ATGCGA',
+        'CAGTGC',
+        'TTATGT',
+        'AGAAGG',
+        'CCCCTA',
+        'TCACTG'
+      ])
+    ).toEqual(true)
+  })
+
+  it('Should call post mutant', async () => {
+    jest.spyOn(service, 'detect').mockImplementation(() => false)
+
+    const res = {
+      status: function(responseStatus) {
+        expect(responseStatus).toEqual(HttpStatus.FORBIDDEN)
+
+        const send = function send() {
+          return false
+        }
+        return { send }
+      }
+    }
+
+    expect(
+      await controller.mutant(res, [
+        'ATGCGA',
+        'CAGTGC',
+        'TTATTT',
+        'AGACGG',
+        'GCGTCA',
+        'TCACTG'
+      ])
+    ).toEqual(false)
   })
 })

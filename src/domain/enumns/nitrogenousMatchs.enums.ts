@@ -1,4 +1,4 @@
-export enum QUADRANT_MATCHS {
+export enum NITROGENOUS_MATCHS {
   horizontal = 'horizontal',
   vertical = 'vertical',
   diagonalRight = 'diagonalRight',

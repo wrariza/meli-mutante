@@ -1,4 +1,4 @@
-export class Quadrant {
+export class NitrogenousBase {
   row: number
   column: number
 }

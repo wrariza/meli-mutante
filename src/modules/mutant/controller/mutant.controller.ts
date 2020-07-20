@@ -1,15 +1,25 @@
-import { Controller, Post, Get, Body, Inject } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Inject,
+  Res,
+  HttpStatus
+} from '@nestjs/common'
 import { MutantService } from '../service/mutant.service'
 import { SMutan } from '../../../bin/constants_injection'
-import { Observable } from 'rxjs'
 
 @Controller('')
 export class MutantController {
   constructor(@Inject(SMutan) private mutantService: MutantService) {}
 
   @Post('mutant')
-  mutant(@Body('dna') dna: string[]): Observable<any> {
-    return this.mutantService.detect(dna)
+  mutant(@Res() response, @Body('dna') dna: string[]) {
+    if (this.mutantService.detect(dna)) {
+      return response.status(HttpStatus.OK).send()
+    }
+    return response.status(HttpStatus.FORBIDDEN).send()
   }
 
   @Get('stats')

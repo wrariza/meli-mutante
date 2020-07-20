@@ -1,4 +1,4 @@
-export enum QUADRANTS_NUMBERS {
+export enum NITROGENOUS_NUMBERS {
   zero = 0,
   one = 1,
   two = 2,

@@ -1,0 +1,5 @@
+export * from './Dna/Dna.model'
+export * from './detectDna/DetectDna.model'
+export * from './nitrogenousBase/NitrogenousBase.model'
+export * from './findMutanDna/FindMutanDna.model'
+export * from './strategy/Strategy.model'

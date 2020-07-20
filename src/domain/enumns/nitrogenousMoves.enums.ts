@@ -1,4 +1,4 @@
-export enum QUADRANT_MOVES {
+export enum NITROGENOUS_MOVES {
   right = 'moveRight',
   left = 'moveLeft',
   down = 'moveDown',
