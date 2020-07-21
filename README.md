@@ -131,7 +131,7 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-# API
+## API
 
 [post mutant][(https://meli-mutante.wilarizav.vercel.app/mutant](https://meli-mutante.wilarizav.vercel.app/mutant)
 
@@ -145,7 +145,7 @@ $ npm run test:cov
 }
 ```
 
-# COVERAGE
+## COVERAGE
 
 <p align="center">
   <a href="https://i.ibb.co/" target="blank"><img src="https://i.ibb.co/0nWZsTC/Screen-Shot-2020-07-21-at-3-19-03-AM.png" width="500" alt="coverage" /></a>
