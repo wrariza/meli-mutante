@@ -71,17 +71,6 @@ Existen 4 tipos:
 
 #### Diagonal Izquierda
 
-### Concideraciones al aplicar las estrategias
-
-Los snapshot que estan en la columna de inicio que no se le aplica la estrategia Diagonal Derecha.
-
-Los snapshot que estan en la columna de final no se le aplica la estrategia Diagonal Izquierda.
-
-Los snapshot que estan en la ultima row no se le aplica la estrategia
-Vertical.
-
-Si hay un snapshot con otro caracter diferente al A,T,C,G se finaliza la busqueda.
-
 # Correr la app
 
 ## Requisitos de la maquina local
