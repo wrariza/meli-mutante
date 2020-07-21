@@ -159,7 +159,7 @@ $ npm run test:cov
 # COVERAGE
 
 <p align="center">
-  <a href="https://drive.google.com/" target="blank"><img src="https://drive.google.com/file/d/1-ZheMRiKaqo4Td1Tou92Ez74aoZ9gpGG/view" width="500" alt="coverage" /></a>
+  <a href="https://i.ibb.co/" target="blank"><img src="https://i.ibb.co/0nWZsTC/Screen-Shot-2020-07-21-at-3-19-03-AM.png" width="500" alt="coverage" /></a>
 </p>
 
 ## License
