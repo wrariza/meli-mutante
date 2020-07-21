@@ -1,40 +1,122 @@
+# Meli-Mutant
+
+Esta api corresponde al reto de mercado libre el cual nos propone desarrolar una api res que soluciones la siguiente problematica.
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+  <a href="https://p.kindpng.com" target="blank"><img src="https://p.kindpng.com/picc/s/188-1888481_magneto-marvel-legends-6-action-figure-marvel-legends.png" width="500" alt="magneto" /></a>
 </p>
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Problema
 
-## Description
+Examen Mercadolibre
+Magneto quiere reclutar la mayor cantidad de mutantes para poder luchar contra los X-Men.
+Te ha contratado a ti para que desarrolles un proyecto que detecte si un humano es mutante basándose en su secuencia de ADN.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Para eso te ha pedido crear un programa con un método o función con la siguiente firma (En alguno de los siguiente lenguajes: Java / Golang / C-C++ / Javascript (node) / Python / Ruby):
 
-## Installation
+boolean isMutant(String[] dna); // Ejemplo Java
 
-```bash
-$ npm install
+En donde recibirás como parámetro un array de Strings que representan cada fila de una tabla de (NxN) con la secuencia del ADN. Las letras de los Strings solo pueden ser: (A,T,C,G), las cuales representa cada base nitrogenada del ADN.
+
+Sabrás si un humano es mutante, si encuentras ​más de una secuencia de cuatro letras
+iguales​, de forma oblicua, horizontal o vertical.
+Ejemplo (Caso mutante):
+String[] dna = {"ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"};
+
+En este caso el llamado a la función isMutant(dna) devuelve “true”.
+Desarrolla el algoritmo de la manera más eficiente posible
+
+## Solución
+
+Teniendo en cuenta la que el problema plantea la eficiencia del algoritmo como un prioridad, fue en lo que mas me enfoque la solción desarrollada parte de las siguientes abstracciones.
+
+## Divir el problema
+
+### Obtener Snapshot
+
+Lo que se hace en esta parte es dividir cualquir matriz que representa el ADN en 4 campos lo que es igual a una matrix 2 * 2
+llamada como Snapshot en una matrix 3*3 tendriamos 9 Snapshot ejemplo del Snapshot 1
+
+```javascript
+
+const dna: String[]= {"ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"};
+
+const snapshot = [A, T, C, A]
+
 ```
 
-## Running the app
+### Estrategias
+
+Una estrategia esta formada por:
+
+Match: posiciones a evalular dentro del snapshot
+
+Movimientos: Operción que se le realiza a al snapshot para validar si existe un match en la siguiente matrix 2\*2
+
+Movimiento reverso: Operación que se realiza si no se encuentra un match dentro para devolverse al anterio snapshot.
+
+### Validación de ADN
+
+Se valida que el ADN se n\*n y que los valores dentro de cada row se han validos.
+
+### Tipos de estrategias.
+
+Existen 4 tipos:
+
+#### Horizontal
+
+#### Vertical
+
+#### Diagonal Derecha
+
+#### Diagonal Izquierda
+
+### Concideraciones al aplicar las estrategias
+
+Los snapshot que estan en la columna de inicio que no se le aplica la estrategia Diagonal Derecha.
+
+Los snapshot que estan en la columna de final no se le aplica la estrategia Diagonal Izquierda.
+
+Los snapshot que estan en la ultima row no se le aplica la estrategia
+Vertical.
+
+Si hay un snapshot con otro caracter diferente al A,T,C,G se finaliza la busqueda.
+
+# Correr la app
+
+## Requisitos de la maquina local
+
+[node](https://nodejs.org/es/) en la version 12
+[mongodb](https://www.mongodb.com/try/download/community) en la version v4.2.8
+
+## Instalación de dependencias
+
+Use el gestor de paquetes [yarn](https://yarnpkg.com/) o [npm](https://www.npmjs.com/)
+
+```bash
+yarn install
+
+npm install
+```
+
+## Base de datos
+
+Correr servidor de mongodb y cambiar la url en el archivo app.module.ts si es caso
+
+```javascript
+@Module({
+  imports: [
+    TerminusModule,
+    CoreModule,
+    MongooseModule.forRoot('mongodb://localhost:27017/dna'),
+    MutantModule
+  ],
+  controllers: [HealthController]
+})
+export class AppModule {}
+```
+
+## Scripts
 
 ```bash
 # development
@@ -47,7 +129,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+### Test
 
 ```bash
 # unit tests
@@ -60,16 +142,20 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+# Urls de api
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+[post mutant][(https://meli-mutante.wilarizav.vercel.app/mutant](https://meli-mutante.wilarizav.vercel.app/mutant)
 
-## Stay in touch
+[get stats][https://meli-mutante.wilarizav.vercel.app/stats](https://meli-mutante.wilarizav.vercel.app/stats)
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```json
+{
+  "count_mutant_dna": 0,
+  "count_human_dna": 0,
+  "ratio": 0
+}
+```
 
 ## License
 
-  Nest is [MIT licensed](LICENSE).
+[MIT](https://choosealicense.com/licenses/mit/)
