@@ -26,7 +26,7 @@ export class MutantRepository {
   async stats(): Promise<Stats> {
     const mutant = await this.dnaModel.find({ mutant: true }).count()
     const human = await this.dnaModel.find({ human: true }).count()
-    const ratio = mutant / human
+    const ratio = human !== 0 ? mutant / human : 0
 
     return {
       // eslint-disable-next-line @typescript-eslint/camelcase

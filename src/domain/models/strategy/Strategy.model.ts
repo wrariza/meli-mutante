@@ -1,7 +1,7 @@
 import { NITROGENOUS_MATCHS } from '../../enumns/nitrogenousMatchs.enums'
 import { NITROGENOUS_NUMBERS } from '../../enumns/nitrogenousNumbers.enums'
 import { NITROGENOUS_MOVES } from '../../enumns/nitrogenousMoves.enums'
-import { DetectDna } from '../index'
+import { DetectDna } from '../detectDna/DetectDna.model'
 
 export class Strategy {
   name: NITROGENOUS_MATCHS

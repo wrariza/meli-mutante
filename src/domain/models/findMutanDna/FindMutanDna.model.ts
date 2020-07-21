@@ -1,10 +1,9 @@
-import { Dna } from '../index'
-import { Strategy } from '../index'
-import { DetectDna } from '../index'
-
 import { NITROGENOUS_MATCHS } from '../../enumns/nitrogenousMatchs.enums'
 import { NITROGENOUS_NUMBERS } from '../../enumns/nitrogenousNumbers.enums'
 import { NITROGENOUS_MOVES } from '../../enumns/nitrogenousMoves.enums'
+import { Dna } from '../dna/Dna.model'
+import { DetectDna } from '../detectDna/DetectDna.model'
+import { Strategy } from '../strategy/Strategy.model'
 
 export class FindMutanDna {
   dna: Dna
