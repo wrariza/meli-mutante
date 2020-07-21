@@ -1,5 +1,6 @@
-import { DetectDna, Dna } from '..'
 import { strategyMock } from './../../../../test/mocks/strategyMock'
+import { DetectDna } from './DetectDna.model'
+import { Dna } from '../dna/Dna.model'
 
 describe('Class DetectDna', () => {
   let detectDna: DetectDna

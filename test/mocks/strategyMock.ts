@@ -1,7 +1,8 @@
 import { NITROGENOUS_MATCHS } from '../../src/domain/enumns/nitrogenousMatchs.enums'
 import { NITROGENOUS_NUMBERS } from '../../src/domain/enumns/nitrogenousNumbers.enums'
 import { NITROGENOUS_MOVES } from '../../src/domain/enumns/nitrogenousMoves.enums'
-import { Strategy, DetectDna } from '../../src/domain/models'
+import { DetectDna } from '../../src/domain/models/detectDna/DetectDna.model'
+import { Strategy } from '../../src/domain/models/strategy/Strategy.model'
 
 export const strategyMock = (detectDna: DetectDna) => {
   return [

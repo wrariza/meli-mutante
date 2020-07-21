@@ -1,11 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common'
 
 import { IMutanService } from '../../../domain/interfaces/Imutan.service'
-import { FindMutanDna } from '../../../domain/models/index'
+
 import { MutantRepository } from '../repository/mutant.repository'
 import { RMutan } from '../../../bin/constants_injection'
 import { CreateDnaDto } from '../dto/create-dna.dto'
 import { Stats } from '../../../domain/models/stats/Stats.model'
+import { FindMutanDna } from '../../../domain/models/findMutanDna/FindMutanDna.model'
 
 @Injectable()
 export class MutantService implements IMutanService {

@@ -1,4 +1,4 @@
-import { Dna } from '..'
+import { Dna } from './Dna.model'
 
 describe('Class Dna', () => {
   let dna: Dna

@@ -1,4 +1,4 @@
-import { FindMutanDna } from '..'
+import { FindMutanDna } from './FindMutanDna.model'
 
 describe('Class FindMutanDna', () => {
   let findMutanDna: FindMutanDna
