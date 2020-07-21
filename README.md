@@ -105,6 +105,20 @@ Correr servidor de mongodb y cambiar la url en el archivo app.module.ts si es ca
 export class AppModule {}
 ```
 
+## Run app local development
+
+```bash
+
+npm run start
+
+o
+
+yarn run start
+
+```
+
+[http://localhost:9000/health](http://localhost:9000/health)
+
 ## Scripts
 
 ```bash

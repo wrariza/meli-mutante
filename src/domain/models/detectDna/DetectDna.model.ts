@@ -51,6 +51,14 @@ export class DetectDna {
         return true
       }
       this.validMoveAndFinalQuadrantColumn(currentColumn)
+      if (
+        currentColumn + this.dna.getSize() / 2 >=
+        this.dna.getTotalQuadrant()
+      ) {
+        this.snapshot.isLastRow = true
+        this.snapshot.isFristColumn = true
+        this.snapshot.isLastColumn = true
+      }
       currentColumn += 1
     }
 
@@ -73,13 +81,17 @@ export class DetectDna {
         return false
       }
 
+      if (s.name === NITROGENOUS_MATCHS.vertical && this.snapshot.isLastRow) {
+        return false
+      }
+
       return s.run()
     })
   }
 
   validMoveAndFinalQuadrantColumn(currentColumn: number): void {
     if (currentColumn !== this.dna.getTotalQuadrant()) {
-      if (this.snapshot.isLastColumn) {
+      if (this.snapshot.isLastColumn && this.snapshot.isLastRow !== true) {
         this.moveRowDow()
         this.buildCurrentNitrogenBase()
         this.snapshot.isFristColumn = true
@@ -110,6 +122,9 @@ export class DetectDna {
     for (const nitrogenousPosition in NITROGENOUS_POSITION_QUADRANT) {
       const row = this.nitrogenBase[nitrogenousPosition].row
       const column = this.nitrogenBase[nitrogenousPosition].column
+      if (6 == row && column === 4) {
+        console.log('error ..')
+      }
       values.push(sequence[row][column])
     }
 
